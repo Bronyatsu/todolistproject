@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <style>
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>To-Do List</h1>
+    <ul id="task-list"></ul>
+    <input type="text" id="new-task" placeholder="New task">
+    <button onclick="addTask()">Add Task</button>
+
+    <script>
+        const apiUrl = '/api/tasks/';
+
+        document.addEventListener('DOMContentLoaded', loadTasks);
+
+        function loadTasks() {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(tasks => {
+                    const taskList = document.getElementById('task-list');
+                    taskList.innerHTML = '';
+                    tasks.forEach(task => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <span class="${task.completed ? 'completed' : ''}" onclick="toggleComplete(${task.id})">${task.title}</span>
+                            <button onclick="deleteTask(${task.id})">Delete</button>
+                        `;
+                        taskList.appendChild(li);
+                    });
+                });
+        }
+
+        function addTask() {
+            const newTask = document.getElementById('new-task').value;
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title: newTask, completed: false }),
+            }).then(() => {
+                document.getElementById('new-task').value = '';
+                loadTasks();
+            });
+        }
+
+        function toggleComplete(id) {
+            fetch(`${apiUrl}${id}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ completed: true }),
+            }).then(loadTasks);
+        }
+
+        function deleteTask(id) {
+            fetch(`${apiUrl}${id}/`, {
+                method: 'DELETE',
+            }).then(loadTasks);
+        }
+    </script>
+</body>
+
+</html>
