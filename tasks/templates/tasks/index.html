@@ -61,7 +61,8 @@
                     tasks.forEach(task => {
                         const li = document.createElement('li');
                         li.innerHTML = `
-                            <span class="${task.completed ? 'completed' : ''}" onclick="toggleComplete(${task.id})">${task.title}</span>
+                            <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleComplete(${task.id}, this.checked)">
+                            <span class="${task.completed ? 'completed' : ''}">${task.title}</span>
                             <button onclick="deleteTask(${task.id})">Delete</button>
                         `;
                         taskList.appendChild(li);
@@ -83,13 +84,13 @@
             });
         }
 
-        function toggleComplete(id) {
+        function toggleComplete(id, completed) {
             fetch(`${apiUrl}${id}/`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ completed: true }),
+                body: JSON.stringify({ completed: completed }),
             }).then(loadTasks);
         }
 
