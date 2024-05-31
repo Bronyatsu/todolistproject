@@ -5,18 +5,48 @@
     <meta charset="UTF-8">
     <title>To-Do List</title>
     <style>
+        body {
+            background-color: rgb(54, 26, 96);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
         .completed {
             text-decoration: line-through;
+        }
+
+        .button {
+            background-color: #f44336;
+            border-radius: 12px;
+        }
+
+        .input {
+            border-radius: 12px;
+            background-color: rgb(229, 223, 223);
+        }
+
+        .div {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .h {
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
-    <h1>To-Do List</h1>
-    <ul id="task-list"></ul>
-    <input type="text" id="new-task" placeholder="New task">
-    <button onclick="addTask()">Add Task</button>
-
+    <div class="div">
+        <h1 class="h">To-Do List</h1>
+        <ul id="task-list"></ul>
+        <input class="input" type="text" id="new-task" placeholder="New task">
+        <button class="button" onclick="addTask()">Add Task</button>
+    </div>
     <script>
         const apiUrl = '/api/tasks/';
 
